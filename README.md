@@ -1,5 +1,9 @@
 # `<For>` followed by siblings desyncs hydration in solid-js 2.0.0-rc.4
 
+> **Filed upstream as [solidjs/solid#3161](https://github.com/solidjs/solid/issues/3161)** — go
+> there for the discussion, any maintainer response, and the current status. This repo is only the
+> runnable reproduction.
+
 A `<For>` with two rows, followed by two ordinary siblings — a `<button>` and a `<pre>` bound to a
 signal. Under SSR + `hydrate`, the siblings after the list are built **detached** at `2.0.0-rc.4`, so
 the button is never interactive. It is clean at `2.0.0-rc.3`, and the SSR markup is byte-identical
@@ -93,8 +97,9 @@ not change; only the client behaviour does.
 
 ## A guess at the mechanism, which may be wrong
 
-It reads as the client not accounting for the ids the `<For>` scope consumed, so everything after the
-list is off by the row count. rc.4 shipped the fix for
+Discussed in [#3161](https://github.com/solidjs/solid/issues/3161). It reads as the client not
+accounting for the ids the `<For>` scope consumed, so everything after the list is off by the row
+count. rc.4 shipped the fix for
 [#3033](https://github.com/solidjs/solid/issues/3033), which made hydration ids compose under a
 scope rather than take flat sibling slots, and `<For>` rows are a composed-scope case — so the two
 may be related. Neither claim is verified.
